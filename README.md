@@ -1,75 +1,59 @@
-# CDCgov GitHub Organization Open Source Project Template
+# Lost Submarine Simulation
 
-**Template for clearance: This project serves as a template to aid projects in starting up and moving through clearance procedures. To start, create a new repository and implement the required [open practices](open_practices.md), train on and agree to adhere to the organization's [rules of behavior](rules_of_behavior.md), and [send a request through the create repo form](https://forms.office.com/Pages/ResponsePage.aspx?id=aQjnnNtg_USr6NJ2cHf8j44WSiOI6uNOvdWse4I-C2NUNk43NzMwODJTRzA4NFpCUk1RRU83RTFNVi4u) using language from this template as a Guide.**
-
-**General disclaimer** This repository was created for use by CDC programs to collaborate on public health related projects in support of the [CDC mission](https://www.cdc.gov/about/organization/mission.htm).  Github is not hosted by the CDC, but is a third party website used by CDC and its partners to share information and collaborate on software.
-
-## Related documents
-
-* [Open Practices](open_practices.md)
-* [Rules of Behavior](rules_of_behavior.md)
-* [Thanks and Acknowledgements](thanks.md)
-* [Disclaimer](DISCLAIMER.md)
-* [Contribution Notice](CONTRIBUTING.md)
-* [Code of Conduct](code-of-conduct.md)
+Simulation code accompanying **"Confidence as Forecast: A Decision-Theoretic Interpretation of Confidence Intervals"** (Lee, 2026), [arXiv:2602.15581](https://arxiv.org/abs/2602.15581).
 
 ## Overview
 
-Describe the purpose of your project. Add additional sections as necessary to help collaborators and potential collaborators understand and use your project.
-  
-## Public Domain Standard Notice
-This repository constitutes a work of the United States Government and is not
-subject to domestic copyright protection under 17 USC § 105. This repository is in
-the public domain within the United States, and copyright and related rights in
-the work worldwide are waived through the [CC0 1.0 Universal public domain dedication](https://creativecommons.org/publicdomain/zero/1.0/).
-All contributions to this repository will be released under the CC0 dedication. By
-submitting a pull request you are agreeing to comply with this waiver of
-copyright interest.
+This script replicates and extends the lost-submarine thought experiment from [Morey et al. (2016)](https://doi.org/10.3758/s13423-015-0947-8). A rescue ship observes pairs of bubbles rising uniformly at random from a submarine's hull and uses them to construct confidence intervals for the location of the hatch. We then evaluate several coverage forecasting strategies — constant forecasts, width-conditional forecasts, and nesting-conditional forecasts — using Brier scores.
 
-## License Standard Notice
-The repository utilizes code licensed under the terms of the Apache Software
-License and therefore is licensed under ASL v2 or later.
+The main result: treating the confidence level as a probabilistic forecast for coverage, and refining that forecast with θ-free statistics like relative interval width, strictly improves predictive performance over both the "always covers" declaration and the constant design-level forecast.
 
-This source code in this repository is free: you can redistribute it and/or modify it under
-the terms of the Apache Software License version 2, or (at your option) any
-later version.
+## Requirements
 
-This source code in this repository is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE. See the Apache Software License for more details.
+- Python 3.8+
+- NumPy
+- pandas
+- scikit-learn
 
-You should have received a copy of the Apache Software License along with this
-program. If not, see http://www.apache.org/licenses/LICENSE-2.0.html
+Install dependencies with:
 
-The source code forked from other open source projects will inherit its license.
+```bash
+pip install numpy pandas scikit-learn
+```
 
-## Privacy Standard Notice
-This repository contains only non-sensitive, publicly available data and
-information. All material and community participation is covered by the
-[Disclaimer](https://github.com/CDCgov/template/blob/master/DISCLAIMER.md)
-and [Code of Conduct](https://github.com/CDCgov/template/blob/master/code-of-conduct.md).
-For more information about CDC's privacy policy, please visit [http://www.cdc.gov/privacy.html](http://www.cdc.gov/privacy.html).
+## Usage
 
-## Contributing Standard Notice
-Anyone is encouraged to contribute to the repository by [forking](https://help.github.com/articles/fork-a-repo)
-and submitting a pull request. (If you are new to GitHub, you might start with a
-[basic tutorial](https://help.github.com/articles/set-up-git).) By contributing
-to this project, you grant a world-wide, royalty-free, perpetual, irrevocable,
-non-exclusive, transferable license to all users under the terms of the
-[Apache Software License v2](http://www.apache.org/licenses/LICENSE-2.0.html) or
-later.
+```bash
+python morey_sim.py
+```
 
-All comments, messages, pull requests, and other submissions received through
-CDC including this GitHub page are subject to the [Presidential Records Act](http://www.archives.gov/about/laws/presidential-records.html)
-and may be archived. Learn more at [http://www.cdc.gov/other/privacy.html](http://www.cdc.gov/other/privacy.html).
+This runs a grid of 110 simulation configurations (hatch location from 0 to 10, hull width from 10 to 110) with 100,000 bubble pairs each and prints summary tables matching Tables 1 and 2 in the paper.
 
-## Records Management Standard Notice
-This repository is not a source of government records, but is a copy to increase
-collaboration and collaborative potential. All government records will be
-published through the [CDC web site](http://www.cdc.gov).
+## What the script does
 
-## Additional Standard Notices
-Please refer to [CDC's Template Repository](https://github.com/CDCgov/template)
-for more information about [contributing to this repository](https://github.com/CDCgov/template/blob/master/CONTRIBUTING.md),
-[public domain notices and disclaimers](https://github.com/CDCgov/template/blob/master/DISCLAIMER.md),
-and [code of conduct](https://github.com/CDCgov/template/blob/master/code-of-conduct.md).
+1. **Constructs confidence intervals** under three 50% coverage procedures: nonparametric (NP), universally most powerful (UMP), and sampling-distribution (SD).
+
+2. **Evaluates marginal forecasting strategies** for the NP and UMP procedures: always predicting coverage (q = 1), predicting at the design level (q = 0.5), and predicting from coverage probability conditioned on relative interval width.
+
+3. **Evaluates joint forecasting strategies** for the SD + UMP pair: constant joint coverage forecast, coverage conditioned on nesting direction, and coverage conditioned on nesting direction plus outer interval width.
+
+4. **Reports Brier score means and variances** across all configurations, along with marginal and joint coverage rates.
+
+## Citation
+
+```bibtex
+@article{lee2026confidence,
+  title={Confidence as Forecast: A Decision-Theoretic Interpretation of Confidence Intervals},
+  author={Lee, Scott},
+  journal={arXiv preprint arXiv:2602.15581},
+  year={2026}
+}
+```
+
+## See also
+
+- [Either a Confidence Interval Covers, or It Doesn't (Or Does It?)](https://arxiv.org/abs/2602.15562) — companion paper on ex-post coverage probability.
+
+## License
+
+MIT
