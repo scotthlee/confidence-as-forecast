@@ -9,6 +9,10 @@ hatch. We construct confidence intervals using three procedures
 coverage forecasting strategies using Brier scores.
 
 See Section 4 of "Confidence as Forecast" (Lee, 2026) for details.
+
+Original script written by Scott Lee. Current script based on 
+Claude Opus 4.6's revisions for clarity and structure to the 
+original.
 """
 
 import numpy as np
